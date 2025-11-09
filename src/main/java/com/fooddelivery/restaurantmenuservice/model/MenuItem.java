@@ -13,6 +13,6 @@ public class MenuItem {
     private String restaurantId; // Foreign Key reference to Restaurant
     private String name;
     private String category;
-    private BigDecimal price; [cite_start]// CRITICAL: Pricing source of truth [cite: 21]
-    private boolean isAvailable; [cite_start]// CRITICAL: Item availability check [cite: 52]
+    private BigDecimal price; // CRITICAL: Pricing source of truth
+    private boolean isAvailable; // CRITICAL: Item availability check
 }

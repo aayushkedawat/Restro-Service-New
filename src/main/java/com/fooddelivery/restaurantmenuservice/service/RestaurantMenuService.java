@@ -23,20 +23,20 @@ public class RestaurantMenuService {
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
 
-    /**
-     * CRITICAL API: Validates order against business rules (is_open, is_available, pricing).
-     * [cite_start]This is called synchronously by the Order Service to achieve decoupling (API Composition). [cite: 59]
-     */
+        /**
+         * CRITICAL API: Validates order against business rules (is_open, is_available, pricing).
+         * This is called synchronously by the Order Service to achieve decoupling (API Composition).
+         */
     public OrderValidationResponse validateOrder(OrderValidationRequest request) {
         // 1. Check Restaurant Existence and Status
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found."));
 
-        [cite_start]// Business Rule: A restaurant may accept orders only when is_open=true. [cite: 52]
+        // Business Rule: A restaurant may accept orders only when is_open=true.
         if (!restaurant.isOpen()) {
             return OrderValidationResponse.builder()
                     .isValid(false)
-                    [cite_start].rejectionReason("Reject orders if restaurant is closed[cite: 25]. Restaurant is currently closed and cannot accept orders.")
+                    .rejectionReason("Reject orders if restaurant is closed. Restaurant is currently closed and cannot accept orders.")
                     .build();
         }
 
@@ -65,11 +65,11 @@ public class RestaurantMenuService {
         for (OrderValidationRequest.ItemRequest requestedItem : request.getItems()) {
             MenuItem currentItem = itemMap.get(requestedItem.getItemId());
 
-            [cite_start]// Business Rule: All requested items must be is_available=true. [cite: 52]
+                        // Business Rule: All requested items must be is_available=true.
             if (!currentItem.isAvailable()) {
                 return OrderValidationResponse.builder()
                         .isValid(false)
-                        [cite_start].rejectionReason("Reject orders if item not available[cite: 25]. Item '" + currentItem.getName() + "' is currently unavailable.")
+                                                .rejectionReason("Reject orders if item not available. Item '" + currentItem.getName() + "' is currently unavailable.")
                         .build();
             }
 
@@ -87,8 +87,8 @@ public class RestaurantMenuService {
         // 4. Success Response
         return OrderValidationResponse.builder()
                 .isValid(true)
-                [cite_start].restaurantCity(restaurant.getCity()) // CRITICAL for Delivery Service check [cite: 53]
-                [cite_start].calculatedItemsTotal(calculatedTotal) // Used by Order Service to calculate final total [cite: 27]
+                .restaurantCity(restaurant.getCity()) // CRITICAL for Delivery Service check
+                .calculatedItemsTotal(calculatedTotal) // Used by Order Service to calculate final total
                 .validatedItems(validatedItems)
                 .build();
     }

@@ -10,7 +10,7 @@ import java.util.List;
 public class OrderValidationResponse {
     private boolean isValid;
     private String rejectionReason;
-    private String restaurantCity; [cite_start]// Returned for Order Service to check Delivery constraint [cite: 53]
+    private String restaurantCity; // Returned for Order Service to check Delivery constraint
     private BigDecimal calculatedItemsTotal;
     private List<ValidatedItem> validatedItems;
 

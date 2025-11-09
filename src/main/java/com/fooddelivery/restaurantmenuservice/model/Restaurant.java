@@ -14,6 +14,6 @@ public class Restaurant {
     private String cuisine;
     private String city;
     private double rating;
-    private boolean isOpen; [cite_start]// CRITICAL: Business rule check [cite: 52]
+    private boolean isOpen; // CRITICAL: Business rule check
     private LocalDateTime createdAt = LocalDateTime.now();
 }

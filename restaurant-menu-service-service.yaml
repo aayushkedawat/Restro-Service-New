@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 8085       # Internal ClusterIP port
       targetPort: 8085 # Container port
-  [cite_start]type: NodePort       # Exposes the service externally via a node port
+  type: NodePort       # Exposes the service externally via a node port

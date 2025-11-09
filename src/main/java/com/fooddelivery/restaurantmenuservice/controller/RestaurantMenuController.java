@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable; [cite_start]// Used for pagination/filtering [cite: 35]
+import org.springframework.data.domain.Pageable; // Used for pagination/filtering
 import java.util.List;
 
 @RestController
@@ -19,7 +19,7 @@ public class RestaurantMenuController {
     private final RestaurantMenuService service;
 
     // ----------------------------------------------------
-    [cite_start]// CRITICAL API for Inter-Service Communication (Order Service) [cite: 56, 59]
+    // CRITICAL API for Inter-Service Communication (Order Service)
     // ----------------------------------------------------
 
     /**
@@ -44,12 +44,12 @@ public class RestaurantMenuController {
     // ----------------------------------------------------
 
     /**
-     * [cite_start]List all restaurants with support for pagination and filtering. [cite: 35]
+     * List all restaurants with support for pagination and filtering.
      */
     @GetMapping
     public ResponseEntity<List<Restaurant>> getAllRestaurants(
-            @RequestParam(required = false) String city,
-            [cite_start]Pageable pageable) { // Spring automatically handles pagination/filtering [cite: 35]
+        @RequestParam(required = false) String city,
+        Pageable pageable) { // Spring automatically handles pagination/filtering
 
         // Actual implementation in the service layer would use pageable object
         // Placeholder return

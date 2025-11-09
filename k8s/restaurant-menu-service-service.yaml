@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 8085       # Service port (used by Order Service)
       targetPort: 8085 # Container port
-  [cite_start]type: NodePort       # NodePort is used for external testing/ingress
+  type: NodePort       # NodePort is used for external testing/ingress
