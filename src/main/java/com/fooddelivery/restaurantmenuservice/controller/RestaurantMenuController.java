@@ -4,7 +4,6 @@ import com.fooddelivery.restaurantmenuservice.dto.OrderValidationRequest;
 import com.fooddelivery.restaurantmenuservice.dto.OrderValidationResponse;
 import com.fooddelivery.restaurantmenuservice.model.Restaurant;
 import com.fooddelivery.restaurantmenuservice.service.RestaurantMenuService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/restaurants")
-@RequiredArgsConstructor
 public class RestaurantMenuController {
 
     private final RestaurantMenuService service;
+
+    public RestaurantMenuController(RestaurantMenuService service) {
+        this.service = service;
+    }
 
     // ----------------------------------------------------
     // CRITICAL API for Inter-Service Communication (Order Service)

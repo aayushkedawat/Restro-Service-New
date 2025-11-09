@@ -6,7 +6,6 @@ import com.fooddelivery.restaurantmenuservice.model.MenuItem;
 import com.fooddelivery.restaurantmenuservice.model.Restaurant;
 import com.fooddelivery.restaurantmenuservice.repository.MenuItemRepository;
 import com.fooddelivery.restaurantmenuservice.repository.RestaurantRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,11 +16,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class RestaurantMenuService {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+
+    public RestaurantMenuService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
+        this.restaurantRepository = restaurantRepository;
+        this.menuItemRepository = menuItemRepository;
+    }
 
         /**
          * CRITICAL API: Validates order against business rules (is_open, is_available, pricing).
