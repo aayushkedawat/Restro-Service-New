@@ -2,8 +2,8 @@ package com.fooddelivery.restaurantmenuservice.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.math.BigDecimal;
 import java.util.Objects;
+// import java.math.BigDecimal; // Deleted - no longer used
 
 @Document(collection = "menu_items")
 public class MenuItem {
@@ -12,12 +12,13 @@ public class MenuItem {
     private String restaurantId; // Foreign Key reference to Restaurant
     private String name;
     private String category;
-    private BigDecimal price; // CRITICAL: Pricing source of truth
+    private Double price; // CRITICAL: Pricing source of truth - now consistently Double
     private boolean isAvailable; // CRITICAL: Item availability check
 
     public MenuItem() {}
 
-    public MenuItem(String id, String restaurantId, String name, String category, BigDecimal price, boolean isAvailable) {
+    // FIXED: Constructor now uses Double for price
+    public MenuItem(String id, String restaurantId, String name, String category, Double price, boolean isAvailable) {
         this.id = id;
         this.restaurantId = restaurantId;
         this.name = name;
@@ -29,6 +30,8 @@ public class MenuItem {
     public static MenuItemBuilder builder() {
         return new MenuItemBuilder();
     }
+
+    // Getters and Setters (using Double)
 
     public String getId() {
         return id;
@@ -62,11 +65,11 @@ public class MenuItem {
         this.category = category;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() { // FIXED: Returns Double
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) { // FIXED: Accepts Double
         this.price = price;
     }
 
@@ -96,12 +99,14 @@ public class MenuItem {
         return Objects.hash(id, restaurantId, name, category, price, isAvailable);
     }
 
+    // Builder (using Double)
+
     public static class MenuItemBuilder {
         private String id;
         private String restaurantId;
         private String name;
         private String category;
-        private BigDecimal price;
+        private Double price; // FIXED: Uses Double
         private boolean isAvailable;
 
         MenuItemBuilder() {
@@ -127,7 +132,7 @@ public class MenuItem {
             return this;
         }
 
-        public MenuItemBuilder price(BigDecimal price) {
+        public MenuItemBuilder price(Double price) { // FIXED: Accepts Double
             this.price = price;
             return this;
         }

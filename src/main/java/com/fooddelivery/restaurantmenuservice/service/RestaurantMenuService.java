@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,7 +61,7 @@ public class RestaurantMenuService {
                 .collect(Collectors.toMap(MenuItem::getId, item -> item));
 
         // 3. Final Availability and Total Calculation
-        BigDecimal calculatedTotal = BigDecimal.ZERO;
+        double calculatedTotal = 0.0;
         List<OrderValidationResponse.ValidatedItem> validatedItems = new java.util.ArrayList<>();
 
         for (OrderValidationRequest.ItemRequest requestedItem : request.getItems()) {
@@ -77,8 +76,8 @@ public class RestaurantMenuService {
             }
 
             // Calculate item subtotal and cumulative total
-            BigDecimal itemSubtotal = currentItem.getPrice().multiply(BigDecimal.valueOf(requestedItem.getQuantity()));
-            calculatedTotal = calculatedTotal.add(itemSubtotal);
+            double itemSubtotal = currentItem.getPrice() * requestedItem.getQuantity(); // Use standard multiplication
+            calculatedTotal += itemSubtotal; // Use standard addition
 
             validatedItems.add(OrderValidationResponse.ValidatedItem.builder()
                     .itemId(currentItem.getId())

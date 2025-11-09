@@ -1,6 +1,6 @@
 package com.fooddelivery.restaurantmenuservice.dto;
 
-import java.math.BigDecimal;
+// Prices and totals use Double in models (Double instead of BigDecimal)
 import java.util.List;
 import java.util.Objects;
 
@@ -8,14 +8,14 @@ public class OrderValidationResponse {
     private boolean isValid;
     private String rejectionReason;
     private String restaurantCity; // Returned for Order Service to check Delivery constraint
-    private BigDecimal calculatedItemsTotal;
+    private Double calculatedItemsTotal;
     private List<ValidatedItem> validatedItems;
 
     public OrderValidationResponse() {
     }
 
     public OrderValidationResponse(boolean isValid, String rejectionReason, String restaurantCity, 
-                                 BigDecimal calculatedItemsTotal, List<ValidatedItem> validatedItems) {
+                                 Double calculatedItemsTotal, List<ValidatedItem> validatedItems) {
         this.isValid = isValid;
         this.rejectionReason = rejectionReason;
         this.restaurantCity = restaurantCity;
@@ -51,11 +51,11 @@ public class OrderValidationResponse {
         this.restaurantCity = restaurantCity;
     }
 
-    public BigDecimal getCalculatedItemsTotal() {
+    public Double getCalculatedItemsTotal() {
         return calculatedItemsTotal;
     }
 
-    public void setCalculatedItemsTotal(BigDecimal calculatedItemsTotal) {
+    public void setCalculatedItemsTotal(Double calculatedItemsTotal) {
         this.calculatedItemsTotal = calculatedItemsTotal;
     }
 
@@ -88,7 +88,7 @@ public class OrderValidationResponse {
         private boolean isValid;
         private String rejectionReason;
         private String restaurantCity;
-        private BigDecimal calculatedItemsTotal;
+    private Double calculatedItemsTotal;
         private List<ValidatedItem> validatedItems;
 
         OrderValidationResponseBuilder() {
@@ -109,7 +109,7 @@ public class OrderValidationResponse {
             return this;
         }
 
-        public OrderValidationResponseBuilder calculatedItemsTotal(BigDecimal calculatedItemsTotal) {
+        public OrderValidationResponseBuilder calculatedItemsTotal(Double calculatedItemsTotal) {
             this.calculatedItemsTotal = calculatedItemsTotal;
             return this;
         }
@@ -126,13 +126,13 @@ public class OrderValidationResponse {
 
     public static class ValidatedItem {
         private String itemId;
-        private BigDecimal price;
+    private Double price;
         private int quantity;
 
         public ValidatedItem() {
         }
 
-        public ValidatedItem(String itemId, BigDecimal price, int quantity) {
+        public ValidatedItem(String itemId, Double price, int quantity) {
             this.itemId = itemId;
             this.price = price;
             this.quantity = quantity;
@@ -150,11 +150,11 @@ public class OrderValidationResponse {
             this.itemId = itemId;
         }
 
-        public BigDecimal getPrice() {
+        public Double getPrice() {
             return price;
         }
 
-        public void setPrice(BigDecimal price) {
+        public void setPrice(Double price) {
             this.price = price;
         }
 
@@ -183,7 +183,7 @@ public class OrderValidationResponse {
 
         public static class ValidatedItemBuilder {
             private String itemId;
-            private BigDecimal price;
+            private Double price;
             private int quantity;
 
             ValidatedItemBuilder() {
@@ -194,7 +194,7 @@ public class OrderValidationResponse {
                 return this;
             }
 
-            public ValidatedItemBuilder price(BigDecimal price) {
+            public ValidatedItemBuilder price(Double price) {
                 this.price = price;
                 return this;
             }
