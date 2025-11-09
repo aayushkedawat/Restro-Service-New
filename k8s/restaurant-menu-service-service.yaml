@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-menu-service # Internal DNS name for other services
+spec:
+  selector:
+    app: restaurant-menu-service
+  ports:
+    - protocol: TCP
+      port: 8085       # Service port (used by Order Service)
+      targetPort: 8085 # Container port
+  [cite_start]type: NodePort       # NodePort is used for external testing/ingress
