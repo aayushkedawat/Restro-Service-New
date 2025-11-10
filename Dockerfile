@@ -1,6 +1,6 @@
 # Dockerfile
 # Use an official OpenJDK image with the correct version
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # Define ARG for the JAR name
 ARG JAR_FILE=target/restaurant-menu-service-0.0.1-SNAPSHOT.jar

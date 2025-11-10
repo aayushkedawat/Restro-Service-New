@@ -1,0 +1,339 @@
+openapi: 3.0.3
+info:
+  title: Restaurant Menu Service API
+  description: Restaurant and Menu management microservice for Online Food Delivery Platform
+  version: 1.0.0
+  contact:
+    name: Food Delivery Team
+    email: support@fooddelivery.com
+
+servers:
+  - url: http://localhost:8085
+    description: Local Development Server
+  - url: https://api.fooddelivery.com
+    description: Production Server
+
+tags:
+  - name: Restaurant Menu
+    description: APIs for managing restaurants and menu items
+
+paths:
+  /v1/restaurants:
+    get:
+      tags:
+        - Restaurant Menu
+      summary: Get All Restaurants
+      description: List all restaurants with optional city filter and pagination support
+      operationId: getAllRestaurants
+      parameters:
+        - name: city
+          in: query
+          description: Filter by city name
+          required: false
+          schema:
+            type: string
+            example: Bengaluru
+        - name: page
+          in: query
+          description: Page number (0-indexed)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Successfully retrieved restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Restaurant"
+
+    post:
+      tags:
+        - Restaurant Menu
+      summary: Create Restaurant
+      description: Admin endpoint to create a new restaurant
+      operationId: createRestaurant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RestaurantCreate"
+      responses:
+        "201":
+          description: Restaurant created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Restaurant"
+
+  /v1/restaurants/{id}:
+    get:
+      tags:
+        - Restaurant Menu
+      summary: Get Restaurant by ID
+      description: Retrieve detailed information about a specific restaurant
+      operationId: getRestaurantById
+      parameters:
+        - name: id
+          in: path
+          description: Restaurant ID
+          required: true
+          schema:
+            type: string
+            example: "1"
+      responses:
+        "200":
+          description: Restaurant found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Restaurant"
+        "404":
+          description: Restaurant not found
+
+  /v1/restaurants/{id}/menu:
+    get:
+      tags:
+        - Restaurant Menu
+      summary: Get Restaurant Menu
+      description: Retrieve the complete menu for a specific restaurant
+      operationId: getRestaurantMenu
+      parameters:
+        - name: id
+          in: path
+          description: Restaurant ID
+          required: true
+          schema:
+            type: string
+            example: "1"
+      responses:
+        "200":
+          description: Menu retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MenuItem"
+        "404":
+          description: Restaurant not found
+
+  /v1/restaurants/validate-order:
+    post:
+      tags:
+        - Restaurant Menu
+      summary: Validate Order
+      description: Critical API for Order Service to validate restaurant status, item availability, and calculate pricing
+      operationId: validateOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderValidationRequest"
+      responses:
+        "200":
+          description: Order is valid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderValidationResponse"
+        "409":
+          description: Order validation failed - restaurant closed or items unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderValidationResponse"
+        "404":
+          description: Restaurant not found
+
+  /v1/restaurants/menu-items/{id}:
+    put:
+      tags:
+        - Restaurant Menu
+      summary: Update Menu Item
+      description: Admin endpoint to update menu item price or availability
+      operationId: updateMenuItem
+      parameters:
+        - name: id
+          in: path
+          description: Menu Item ID
+          required: true
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MenuItemUpdate"
+      responses:
+        "200":
+          description: Menu item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuItem"
+        "404":
+          description: Menu item not found
+
+components:
+  schemas:
+    Restaurant:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "Green Garden"
+        cuisine:
+          type: string
+          example: "Mexican"
+        city:
+          type: string
+          example: "Pune"
+        rating:
+          type: number
+          format: double
+          example: 4.8
+        isOpen:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-03-06T14:38:40"
+
+    RestaurantCreate:
+      type: object
+      required:
+        - name
+        - cuisine
+        - city
+      properties:
+        name:
+          type: string
+          example: "New Restaurant"
+        cuisine:
+          type: string
+          example: "Italian"
+        city:
+          type: string
+          example: "Mumbai"
+        rating:
+          type: number
+          format: double
+          example: 4.5
+        isOpen:
+          type: boolean
+          example: true
+
+    MenuItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        restaurantId:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "Tandoori Noodles"
+        category:
+          type: string
+          example: "Main Course"
+        price:
+          type: number
+          format: double
+          example: 240.86
+        available:
+          type: boolean
+          example: true
+
+    MenuItemUpdate:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+          example: 250.00
+        available:
+          type: boolean
+          example: true
+
+    OrderValidationRequest:
+      type: object
+      required:
+        - restaurantId
+        - items
+      properties:
+        restaurantId:
+          type: string
+          example: "1"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemRequest"
+
+    ItemRequest:
+      type: object
+      required:
+        - itemId
+        - quantity
+      properties:
+        itemId:
+          type: string
+          example: "1"
+        quantity:
+          type: integer
+          example: 2
+
+    OrderValidationResponse:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+          example: true
+        restaurantCity:
+          type: string
+          example: "Pune"
+        calculatedItemsTotal:
+          type: number
+          format: double
+          example: 481.72
+        validatedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidatedItem"
+        rejectionReason:
+          type: string
+          example: "Restaurant is currently closed"
+
+    ValidatedItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+          example: "1"
+        price:
+          type: number
+          format: double
+          example: 240.86
+        quantity:
+          type: integer
+          example: 2

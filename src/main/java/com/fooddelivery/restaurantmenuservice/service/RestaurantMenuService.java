@@ -94,4 +94,37 @@ public class RestaurantMenuService {
                 .validatedItems(validatedItems)
                 .build();
     }
+
+    public List<Restaurant> getAllRestaurants(String city, org.springframework.data.domain.Pageable pageable) {
+        if (city != null && !city.isEmpty()) {
+            return restaurantRepository.findByCity(city);
+        }
+        return restaurantRepository.findAll();
+    }
+
+    public Restaurant getRestaurantById(String id) {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found"));
+    }
+
+    public List<MenuItem> getRestaurantMenu(String restaurantId) {
+        Restaurant restaurant = getRestaurantById(restaurantId);
+        return menuItemRepository.findByRestaurantId(restaurantId);
+    }
+
+    public Restaurant createRestaurant(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+
+    public MenuItem updateMenuItem(String id, MenuItem menuItem) {
+        MenuItem existing = menuItemRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu item not found"));
+        
+        if (menuItem.getPrice() != null) {
+            existing.setPrice(menuItem.getPrice());
+        }
+        existing.setAvailable(menuItem.isAvailable());
+        
+        return menuItemRepository.save(existing);
+    }
 }

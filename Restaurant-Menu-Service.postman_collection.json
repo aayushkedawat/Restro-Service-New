@@ -1,0 +1,210 @@
+{
+  "info": {
+    "name": "Restaurant Menu Service",
+    "description": "Restaurant and Menu management microservice for Online Food Delivery Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "restaurant-menu-service"
+  },
+  "item": [
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Get All Restaurants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants"]
+            },
+            "description": "List all restaurants with optional city filter and pagination support"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurants by City",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants?city=Bengaluru",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants"],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Bengaluru",
+                  "description": "Filter by city name"
+                }
+              ]
+            },
+            "description": "Get restaurants filtered by city"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "1"]
+            },
+            "description": "Retrieve detailed information about a specific restaurant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurant Menu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/1/menu",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "1", "menu"]
+            },
+            "description": "Retrieve the complete menu for a specific restaurant"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Restaurant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Restaurant\",\n  \"cuisine\": \"Italian\",\n  \"city\": \"Mumbai\",\n  \"rating\": 4.5,\n  \"isOpen\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants"]
+            },
+            "description": "Admin endpoint to create a new restaurant"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu Items",
+      "item": [
+        {
+          "name": "Update Menu Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 250.00,\n  \"available\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/menu-items/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "menu-items", "1"]
+            },
+            "description": "Admin endpoint to update menu item price or availability"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order Validation",
+      "item": [
+        {
+          "name": "Validate Order - Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"1\",\n  \"items\": [\n    {\n      \"itemId\": \"1\",\n      \"quantity\": 2\n    },\n    {\n      \"itemId\": \"2\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/validate-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "validate-order"]
+            },
+            "description": "Validate order with available items from an open restaurant"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Order - Restaurant Closed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"2\",\n  \"items\": [\n    {\n      \"itemId\": \"11\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/validate-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "validate-order"]
+            },
+            "description": "Validate order from a closed restaurant (should return 409)"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Order - Item Unavailable",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"3\",\n  \"items\": [\n    {\n      \"itemId\": \"19\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/restaurants/validate-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "restaurants", "validate-order"]
+            },
+            "description": "Validate order with unavailable item (should return 409)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8085",
+      "type": "string"
+    }
+  ]
+}
